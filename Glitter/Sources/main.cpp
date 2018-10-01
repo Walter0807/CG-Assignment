@@ -1,16 +1,13 @@
 // Local Headers
 #include "glitter.hpp"
 
-//// Console Color
-//#include "consoleColor.hpp"
-
 // System Headers
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 // Standard Headers
-//#include <cstdio>
-//#include <cstdlib>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 
 // 声明按键函数
@@ -20,8 +17,8 @@ int main(int argc, char * argv[]) {
     
     // glfw初始化
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 此行用来给Mac OS X系统做兼容
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
