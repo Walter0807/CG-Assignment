@@ -22,17 +22,18 @@ const GLchar* vertexShaderSource = "#version 330 core\n"
 "}\0";
 const GLchar* fragmentShaderSource = "#version 330 core\n"
 "out vec4 color;\n"
+"uniform vec4 ourColor;\n"
 "void main()\n"
 "{\n"
-"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"color = ourColor;\n"
 "}\n\0";
 
 int main(int argc, char * argv[]) {
     
     // glfw初始化
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 此行用来给Mac OS X系统做兼容
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -107,7 +108,11 @@ int main(int argc, char * argv[]) {
     GLfloat vertices[] = {
         -0.5f, -0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
+        0.0f,  0.5f, 0.0f,
+        
+        0.5f, 0.5f, 0.0f,
+        0.5f, 1.5f, 0.5f,
+        1.0f, 1.0f, 0.0f
     };
     
     // 顶点数组对象 Vertex Array Object, VAO
@@ -143,8 +148,16 @@ int main(int argc, char * argv[]) {
         
         // 绘图
         glUseProgram(shaderProgram);
+        
+        // update the uniform color
+        float timeValue = glfwGetTime();
+        float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+        
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
         
         // 交换缓冲
