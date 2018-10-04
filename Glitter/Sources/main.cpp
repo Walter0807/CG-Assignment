@@ -105,6 +105,26 @@ public:
 
 // 声明按键函数
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void do_movement();
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+
+// 相机参数
+glm::vec3 cameraPos = glm::vec3(-2.0f, 0.0f, 1.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+GLfloat yaw = -20.0f;    // Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
+GLfloat pitch = 0.0f;
+GLfloat lastX = mWidth / 2.0;
+GLfloat lastY = mHeight / 2.0;
+//float fov   =  45.0f;
+bool keys[1024];
+
+// 时间增量Deltatime
+GLfloat deltaTime = 0.0f;    // Time between current frame and last frame
+GLfloat lastFrame = 0.0f;      // Time of last frame
+
 
 int main(int argc, char * argv[]) {
     
@@ -128,6 +148,7 @@ int main(int argc, char * argv[]) {
     
     // 通过glfw注册按键事件回调
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
     
     // Load OpenGL Functions
     gladLoadGL();
@@ -139,22 +160,41 @@ int main(int argc, char * argv[]) {
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
     
+    glEnable(GL_DEPTH_TEST);
+    
     // 编译着色器程序
     Shader ourShader("vert.vert", "frag.frag");
     
     // 顶点输入
     GLfloat vertices[] = {
         //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        1.5f,  1.5f, 0.0f,   0.4f, 0.4f, 0.4f,   // 右上
-        1.5f, -1.5f, 0.0f,   0.4f, 0.4f, 0.4f,  // 右下
-        -1.5f, -1.5f, 0.0f,   0.4f, 0.4f, 0.4f,   // 左下
-        -1.5f,  1.5f, 0.0f,   0.4f, 0.4f, 0.4f, // 左上
+        1.5f,  -0.5f, 1.5f,   0.4f, 0.4f, 0.4f,   // 右上
+        1.5f,  -0.5f, -1.5f,   0.4f, 0.4f, 0.4f,  // 右下
+        -1.5f, -0.5f, 1.5f,   0.4f, 0.4f, 0.4f,   // 左下
+        -1.5f, -0.5f, -1.5f,   0.4f, 0.4f, 0.4f, // 左上
+        
+        0.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
+        0.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        0.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
+        0.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
+        -0.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        -0.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
+        -0.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
     };
     
     GLuint indices[] = { // 注意索引从0开始!
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
+        0, 1, 2, 3,
+        4, 5, 6, 7,
+        8, 9, 10, 11,
+        4, 5, 8, 9,
+        6, 7, 10, 11,
+        4, 6, 8, 10,
+        5, 7, 9, 11,
     };
+    
+
     
     
     // 顶点数组对象 Vertex Array Object, VAO
@@ -187,25 +227,31 @@ int main(int argc, char * argv[]) {
     // 渲染
     while (!glfwWindowShouldClose(window))
     {
+        GLfloat currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+//        std::cout << deltaTime << std::endl;
         // 检查事件
         glfwPollEvents();
-        
+        do_movement();
         // 渲染指令
-        glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.9f, 0.9f, 0.9f, 0.6f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // 绘图
         ourShader.Use();
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLE_STRIP, 24, GL_UNSIGNED_INT, (GLvoid*)(4 * sizeof(GL_UNSIGNED_INT)));
         glBindVertexArray(0);
         
         // 变换
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
-        model = glm::rotate(model, -45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+//        model = glm::rotate(model, -45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+//        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         projection = glm::perspective(45.0f, (GLfloat)mWidth / (GLfloat)mHeight, 0.1f, 100.0f);
         // Get their uniform location
         GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -236,6 +282,73 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     // 当用户按下ESC键,我们设置window窗口的WindowShouldClose属性为true
     // 关闭应用程序
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            keys[key] = false;
+    }
 }
+
+void do_movement()
+{
+    // 摄像机控制
+    GLfloat cameraSpeed = 5.0f * deltaTime;
+    if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
+//        cameraPos += cameraSpeed * cameraFront;
+        cameraPos += cameraUp * cameraSpeed;
+    if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
+//        cameraPos -= cameraSpeed * cameraFront;
+        cameraPos -= cameraUp * cameraSpeed;
+    if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+//    std::cout << keys[GLFW_KEY_UP] << std::endl;
+    
+    if (keys[GLFW_KEY_EQUAL])
+                cameraPos += cameraSpeed * cameraFront;
+    if (keys[GLFW_KEY_MINUS])
+                cameraPos -= cameraSpeed * cameraFront;
+}
+
+
+bool firstMouse = true;
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    GLfloat xoffset = xpos - lastX;
+    GLfloat yoffset = lastY - ypos; // 注意这里是相反的，因为y坐标是从底部往顶部依次增大的
+    lastX = xpos;
+    lastY = ypos;
+    
+    GLfloat sensitivity = 0.05;    // 灵敏度
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+    
+    yaw += xoffset;
+    pitch += yoffset;
+    
+    // 对于俯仰角，要让用户不能看向高于89度的地方（在90度时视角会发生逆转，所以我们把89度作为极限） flipped
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+    
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
+}
+
+
