@@ -111,7 +111,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 
 // 相机参数
-glm::vec3 cameraPos = glm::vec3(-2.0f, 0.0f, 1.0f);
+glm::vec3 cameraPos = glm::vec3(-4.0f, 1.0f, 2.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 GLfloat yaw = -20.0f;    // Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right (due to how Eular angles work) so we initially rotate a bit to the left.
@@ -168,20 +168,23 @@ int main(int argc, char * argv[]) {
     // 顶点输入
     GLfloat vertices[] = {
         //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        1.5f,  -0.5f, 1.5f,   0.4f, 0.4f, 0.4f,   // 右上
-        1.5f,  -0.5f, -1.5f,   0.4f, 0.4f, 0.4f,  // 右下
-        -1.5f, -0.5f, 1.5f,   0.4f, 0.4f, 0.4f,   // 左下
-        -1.5f, -0.5f, -1.5f,   0.4f, 0.4f, 0.4f, // 左上
+        2.5f,  -0.51f, 2.5f,   0.4f, 0.4f, 0.4f,   // 右上
+        2.5f,  -0.51f, -2.5f,   0.4f, 0.4f, 0.4f,  // 右下
+        -2.5f, -0.51f, 2.5f,   0.4f, 0.4f, 0.4f,   // 左下
+        -2.5f, -0.51f, -2.5f,   0.4f, 0.4f, 0.4f, // 左上
         
-        0.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
-        0.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
-        0.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
-        0.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        1.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
+        1.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        1.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
+        1.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
         
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
-        -0.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
-        -0.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
-        -0.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        -1.5f, -0.5f, -0.5f,  1.0f, 0.4f, 0.4f,
+        -1.5f, -0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        -1.5f,  0.5f, -0.5f,  0.4f, 0.4f, 1.0f,
+        -1.5f,  0.5f, +0.5f,  0.4f, 1.0f, 0.4f,
+        
+        0.7f, 0.9f, 0.0f,     0.0f, 0.0f, 0.0f,
+        -0.7f, 0.9f, 0.0f,     0.0f, 0.0f, 0.0f,
     };
     
     GLuint indices[] = { // 注意索引从0开始!
@@ -192,6 +195,8 @@ int main(int argc, char * argv[]) {
         6, 7, 10, 11,
         4, 6, 8, 10,
         5, 7, 9, 11,
+        11,10,13,6,12,7,13,11,
+        
     };
     
 
@@ -243,6 +248,7 @@ int main(int argc, char * argv[]) {
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0);
         glDrawElements(GL_TRIANGLE_STRIP, 24, GL_UNSIGNED_INT, (GLvoid*)(4 * sizeof(GL_UNSIGNED_INT)));
+        glDrawElements(GL_TRIANGLE_STRIP, 8, GL_UNSIGNED_INT, (GLvoid*)(28 * sizeof(GL_UNSIGNED_INT)));
         glBindVertexArray(0);
         
         // 变换
