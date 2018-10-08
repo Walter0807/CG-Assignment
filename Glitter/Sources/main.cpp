@@ -1,3 +1,9 @@
+///////////////////////////////////////////
+////Type your name and student ID here/////
+////Name: Wentao ZHU
+////Student ID: 1155123308
+
+
 // Preprocessor Directives
 #define STB_IMAGE_IMPLEMENTATION
 
