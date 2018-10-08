@@ -16,8 +16,7 @@ As you may know, modern OpenGL is poorly supported on macOS 10.14. To be more sp
 
 ```bash
 git clone --recursive https://github.com/Walter0807/CG-Assignment-1.git
-cd Glitter
-cd Build
+cd CG-Assignment-1/Build
 ```
 
 Now generate a project file or makefile for your platform. If you want to use a particular IDE, make sure it is installed; don't forget to set the Start-Up Project in Visual Studio or the Target in Xcode.
