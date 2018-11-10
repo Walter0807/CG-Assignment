@@ -40,7 +40,7 @@ Then put the attached files to corresponding root directorty, compile and run.
 
 Dependency: [cmake](http://www.cmake.org/download/)
 
-You can check out the video [here](https://www.walterzhu.com/Resources/course_files/CGHW1Recording.mp4) (Download the video file).
+You can check out the video [here](https://drive.google.com/open?id=1K3CZNhW_zi7FDHK1qYolUyRLNrHdQgH_).
 
 If you have any questions, please [contact me](mailto:walterzhu@pku.edu.cn). I can also show it to you in person.
 
