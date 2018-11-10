@@ -916,16 +916,16 @@ void keyboard_callback(float& diffuseS, float& specularS)
 {
     
     if (keys[GLFW_KEY_W])
-        diffuseS =max(0.0, diffuseS-0.05);
+        diffuseS =max(0.0, diffuseS-0.1);
     
     if (keys[GLFW_KEY_Q])
-        diffuseS =min(2.0, diffuseS+0.05);
+        diffuseS =min(2.0, diffuseS+0.1);
     
     if (keys[GLFW_KEY_X])
-        specularS =max(0.0, specularS-0.05);
+        specularS =max(0.0, specularS-0.1);
     
     if (keys[GLFW_KEY_Z])
-        specularS =min(2.0, specularS+0.05);
+        specularS =min(2.0, specularS+0.1);
     
     if (keys[GLFW_KEY_1])
         idx = 0;
