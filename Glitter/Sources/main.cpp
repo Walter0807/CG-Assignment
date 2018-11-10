@@ -621,7 +621,7 @@ int main(int argc, char * argv[]) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     // Create a window
-    GLFWwindow* window = glfwCreateWindow(mWidth, mHeight, "LearnOpenGL", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(mWidth, mHeight, "Assignment 2", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;

@@ -1,4 +1,4 @@
-# CSCI 3260 Assignment 1
+# CSCI 3260 Assignment 2
 
 > 1155123308 Wentao Zhu
 
@@ -15,7 +15,7 @@ As you may know, modern OpenGL is poorly supported on macOS 10.14. To be more sp
 ### How you can test the project:
 
 ```bash
-git clone --recursive https://github.com/Walter0807/CG-Assignment-1.git
+git clone --recursive https://github.com/Walter0807/CG-Assignment.git
 cd CG-Assignment-1/Build
 ```
 
@@ -34,7 +34,7 @@ cmake -G "Visual Studio 14 Win64" ..
 ...
 ```
 
-Then put the glsl files to corresponding root directorty, compile and run.
+Then put the attached files to corresponding root directorty, compile and run.
 
 
 
@@ -46,22 +46,23 @@ If you have any questions, please [contact me](mailto:walterzhu@pku.edu.cn). I c
 
 ## Implementation
 
-![](http://p3b1oqmkp.bkt.clouddn.com/67cbfb5399743d523c2470479592882a.jpg)
+![SS](SS.jpg)
 
 ### Objects
 
-- The flowers and the door are drawn using dots and lines.
-- The plane (grass) and the road are drawn as a 2D object.
-- The house is drawn as a combined 3D object.
-
-
+- A superman is fighting agaist an enemy for the fragile planet.
+- Three .obj models are loaded and textured.
 
 ### Interaction
 
-- Use arrow keys or ASWD to move (translation).
-- Use =(+) and - to scale.
-- Use mouse to rotate.
-- Use Esc to exit.
+- As the insturction writes.
+- Control the character on the left using arrow keys, control the character on the right using I/J/K/L
+
+ ### Implementation
+
+- In this project, all the basic requirements are fulfilled. 
+
+- Moreover, a skybox is rendered. A directional light (from right side) and a spotlight (from the camera) are implemented.
 
 
 
