@@ -646,11 +646,11 @@ int main(int argc, char * argv[]) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
     // Compile shaders
-    Shader shader("vert.vert", "frag.frag");
-    Shader skyboxShader("skybox.vert", "skybox.frag");
+    Shader shader("vertexShaderCode.glsl", "FragmentShaderCode.glsl");
+    Shader skyboxShader("skyboxvert.glsl", "skyboxfrag.glsl");
     
     // Load Models
-    Model Soldier("Warrior/warrior.obj");
+    Model Soldier("warrior/warrior.obj");
     Model Enemy("nanosuit/nanosuit.obj");
     Model Earth("earth/earth.obj");
     
@@ -759,7 +759,7 @@ int main(int argc, char * argv[]) {
     faces.push_back("skybox/cwd_ft.JPG");
     GLuint cubemapTexture = loadCubemap(faces);
     float ambientS = 0.5, diffuseS = 1.5, specularS = 0.3;
-    char* planeText[] = {"text0.jpg", "text1.png", "text2.png"};
+    char* planeText[] = {"textures/text0.jpg", "textures/text1.png", "textures/text2.png"};
     
     GLfloat elapsedTime = 0.0f;
     glUniform1i(glGetUniformLocation(shader.Program, "material.diffuse"), 0);
