@@ -50,7 +50,7 @@ If you have any questions, please [contact me](mailto:walterzhu@pku.edu.cn). I c
 
 ### Objects
 
-- A superman is fighting agaist an enemy for the fragile planet.
+- A superman is fighting against an enemy for the fragile planet.
 - Three .obj models are loaded and textured.
 
 ### Interaction
